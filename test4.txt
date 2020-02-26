@@ -1,0 +1,17 @@
+function $test() {
+@start	
+
+@B1
+	jmp @B2
+@B2
+	jnz 0, @B3, @B4
+@B3
+	jnz 0, @B5, @B4
+@B4
+	jnz 0, @B5, @B2
+@B5
+	jmp @end
+@end
+	ret
+
+}
