@@ -1,0 +1,751 @@
+s02140384 [cmc-2020]: Report for run 42
+Settings
+ 
+Info
+Summary
+Submissions
+User standings
+Submit clar
+Clars
+ 
+Logout [s02140384]
+logo
+22:02:46 / RUNNING
+OK
+Max. CPU time: 0.004
+
+N	Result	Time (sec)	Real time (sec)	Max memory used	Extra info	Link
+1	OK	0.004	0.005	0	 	L I O A E C F
+2	OK	0.000	0.002	21622784	 	L I O A E C F
+3	OK	0.000	0.002	21622784	 	L I O A E C F
+4	OK	0.000	0.003	21622784	 	L I O A E C F
+5	OK	0.000	0.004	21622784	 	L I O A E C F
+6	OK	0.000	0.003	21622784	 	L I O A E C F
+7	OK	0.000	0.002	21622784	 	L I O A E C F
+8	OK	0.000	0.003	21622784	 	L I O A E C F
+
+L	Command-line parameters
+I	Test input
+O	Program output
+A	Correct output
+E	Program output to stderr
+C	Checker output
+F	Additional test information
+====== Test #1 =======
+--- Input: size 179 ---
+function w $main() {
+@start
+    %x =w copy 5
+@loop
+    %x =w mul %x, %x
+    %cond =w csgew %x, 200
+    jnz %cond, @end, @loop
+@end
+    %t =w call $printf(l $fmt, w %x)
+    ret 0
+}
+--- Output: size 137 ---
+@start : :
+@loop : :
+@end : :
+@loop__r : : @loop__r-@loop__r
+@start__r : @loop__r__r @end__r : @start__r-@loop__r__r @loop__r__r-@end__r
+
+--- Correct: size 138 ---
+@start : :
+@loop : :
+@end : :
+@loop__r : : @loop__r-@loop__r
+@start__r : @loop__r__r @end__r : @start__r-@loop__r__r @loop__r__r-@end__r
+
+
+--- Stderr: size 0 ---
+
+--- Checker output: size 0 ---
+
+--- Resource usage ---
+program: { utime=4, stime=0, ptime=4, rtime=5, maxvsz=0, maxrss=2834432, nvcsw=1, nivcsw=1 }
+checker: { utime=1204, stime=380, ptime=1584, rtime=1600, maxvsz=11403264, maxrss=98615296, nvcsw=247, nivcsw=101 }
+
+====== Test #2 =======
+--- Input: size 999 ---
+export function $sieve(w %n, l %prime) {
+@fill0.cond
+  %cond =w csgtw %n, 0
+  jnz %cond, @fill0.body, @fill0.exit
+
+@fill0.body
+  storeb 0, %prime
+
+@fill0.exit
+  %cond =w csgtw %n, 1
+  jnz %cond, @fill1.body, @fill1.exit
+
+@fill1.body
+  %addr =l add %prime, 1
+  storeb 0, %addr
+
+@fill1.exit
+  %i =w cast 2
+
+@fill2.header
+  %cond =w csltw %i, %n
+  jnz %cond, @fill2.body, @fill2.exit
+
+@fill2.body
+  %i1 =l extsw %i
+  %addr =l add %prime, %i1
+  storeb 1, %addr
+  %i =w add %i, 1
+  jmp @fill2.header
+
+@fill2.exit
+  %i =w cast 1
+
+@outer.header
+  %i =w add %i, 1
+  %cond =w csltw %i, %n
+  jnz %cond, @outer.cond,  @outer.exit
+
+@outer.cond
+  %i1 =l extsw %i
+  %addr =l add %prime, %i1
+  %value =w loadsb %addr
+  jnz %value, @inner.preheader, @outer.header
+
+@inner.preheader
+  %j =w mul %i, %i
+
+@inner.header
+  %cond =w csltw %j, %n
+  jnz %cond, @inner.body, @outer.header
+
+@inner.body
+  %j1 =l extsw %j
+  %addr =l add %prime, %j1
+  storeb 0, %addr
+  %j =w add %j, %i
+  jmp @outer.header
+
+@outer.exit
+  ret
+}
+--- Output: size 1440 ---
+@fill0.cond : :
+@fill0.body : :
+@fill0.exit : :
+@fill1.body : :
+@fill1.exit : :
+@fill2.header : :
+@fill2.body : :
+@fill2.exit : :
+@outer.header : :
+@outer.cond : :
+@inner.preheader : :
+@inner.header : :
+@inner.body : :
+@outer.exit : :
+@outer.header__r : @outer.cond__r : @outer.header__r-@outer.cond__r
+@outer.header__r__r : : @outer.header__r__r-@outer.header__r__r
+@outer.header__r__r__r : @inner.preheader__r @inner.header__r : @outer.header__r__r__r-@inner.preheader__r @inner.preheader__r-@inner.header__r
+@outer.header__r__r__r__r : : @outer.header__r__r__r__r-@outer.header__r__r__r__r
+@outer.header__r__r__r__r__r : @inner.body__r : @outer.header__r__r__r__r__r-@inner.body__r
+@outer.header__r__r__r__r__r__r : : @outer.header__r__r__r__r__r__r-@outer.header__r__r__r__r__r__r
+@fill2.header__r : @fill2.body__r : @fill2.header__r-@fill2.body__r
+@fill2.header__r__r : : @fill2.header__r__r-@fill2.header__r__r
+@fill0.cond__r : @fill1.body__r @fill0.body__r @fill0.exit__r @fill1.exit__r @fill2.header__r__r__r @fill2.exit__r @outer.header__r__r__r__r__r__r__r @outer.exit__r : @fill0.exit__r-@fill1.body__r @fill1.body__r-@fill1.exit__r @fill0.cond__r-@fill0.body__r @fill0.body__r-@fill0.exit__r @fill0.cond__r-@fill0.exit__r @fill0.exit__r-@fill1.exit__r @fill1.exit__r-@fill2.header__r__r__r @fill2.header__r__r__r-@fill2.exit__r @fill2.exit__r-@outer.header__r__r__r__r__r__r__r @outer.header__r__r__r__r__r__r__r-@outer.exit__r
+
+--- Correct: size 1441 ---
+@fill0.cond : : 
+@fill0.body : :
+@fill0.exit : :
+@fill1.body : :
+@fill1.exit : :
+@fill2.header : :
+@fill2.body : :
+@fill2.exit : :
+@outer.header : :
+@outer.cond : :
+@inner.preheader : :
+@inner.header : :
+@inner.body : :
+@outer.exit : :
+@fill2.header__r : @fill2.body__r : @fill2.header__r-@fill2.body__r
+@fill2.header__r__r : : @fill2.header__r__r-@fill2.header__r__r
+@outer.header__r : @outer.cond__r : @outer.header__r-@outer.cond__r
+@outer.header__r__r : : @outer.header__r__r-@outer.header__r__r
+@outer.header__r__r__r : @inner.preheader__r @inner.header__r : @outer.header__r__r__r-@inner.preheader__r @inner.preheader__r-@inner.header__r
+@outer.header__r__r__r__r : : @outer.header__r__r__r__r-@outer.header__r__r__r__r
+@outer.header__r__r__r__r__r : @inner.body__r : @outer.header__r__r__r__r__r-@inner.body__r
+@outer.header__r__r__r__r__r__r : : @outer.header__r__r__r__r__r__r-@outer.header__r__r__r__r__r__r
+@fill0.cond__r : @fill0.body__r @fill0.exit__r @fill1.body__r @fill1.exit__r @fill2.header__r__r__r @fill2.exit__r @outer.header__r__r__r__r__r__r__r @outer.exit__r : @fill0.cond__r-@fill0.body__r @fill0.cond__r-@fill0.exit__r @fill0.body__r-@fill0.exit__r @fill0.exit__r-@fill1.body__r @fill0.exit__r-@fill1.exit__r @fill1.body__r-@fill1.exit__r @fill1.exit__r-@fill2.header__r__r__r @fill2.header__r__r__r-@fill2.exit__r @fill2.exit__r-@outer.header__r__r__r__r__r__r__r @outer.header__r__r__r__r__r__r__r-@outer.exit__r
+
+--- Stderr: size 0 ---
+
+--- Checker output: size 0 ---
+
+--- Resource usage ---
+program: { utime=0, stime=0, ptime=0, rtime=2, maxvsz=21622784, maxrss=2973696, nvcsw=1, nivcsw=2 }
+checker: { utime=1216, stime=236, ptime=1452, rtime=1464, maxvsz=11403264, maxrss=98603008, nvcsw=233, nivcsw=66 }
+
+====== Test #3 =======
+--- Input: size 1961 ---
+export function w $plot(w %t0, w %t1, w %t2) {
+@l0
+	%x =l alloc4 4
+	storew %t0, %x
+	%y =l alloc4 4
+	storew %t1, %y
+	%rnd =l alloc4 4
+	storew %t2, %rnd
+	%n =l alloc4 4
+	%fx =l alloc4 4
+	%fy =l alloc4 4
+	%zx =l alloc4 4
+	%zy =l alloc4 4
+	%nx =l alloc4 4
+	%ny =l alloc4 4
+	%W =l alloc4 4
+	%H =l alloc4 4
+	%col =l alloc8 8
+	%t7 =w loadw %x
+	%t9 =w loadw %W
+	%t8 =w div %t9, 2
+	%t6 =w sub %t7, %t8
+	%t5 =w mul %t6, 4000
+	%t12 =w loadw %W
+	%t4 =w div %t5, %t12
+	storew %t4, %fx
+	%t17 =w loadw %y
+	%t19 =w loadw %H
+	%t18 =w div %t19, 2
+	%t16 =w sub %t17, %t18
+	%t15 =w mul %t16, 4000
+	%t22 =w loadw %H
+	%t14 =w div %t15, %t22
+	storew %t14, %fy
+	%t24 =w loadw %fx
+	storew %t24, %zx
+	%t26 =w loadw %fy
+	storew %t26, %zy
+	storew 0, %n
+@l1
+	%t30 =w loadw %n
+	%t29 =w csltw %t30, 200
+	jnz %t29, @l2, @l3
+@l2
+	%t36 =w loadw %zx
+	%t37 =w loadw %zx
+	%t35 =w mul %t36, %t37
+	%t39 =w loadw %zy
+	%t40 =w loadw %zy
+	%t38 =w mul %t39, %t40
+	%t34 =w add %t35, %t38
+	%t32 =w csltw 4000000, %t34
+	jnz %t32, @l4, @l5
+@l4
+	jmp @l3
+@l5
+	%t46 =w loadw %zx
+	%t47 =w loadw %zx
+	%t45 =w mul %t46, %t47
+	%t44 =w div %t45, 1000
+	%t51 =w loadw %zy
+	%t52 =w loadw %zy
+	%t50 =w mul %t51, %t52
+	%t49 =w div %t50, 1000
+	%t43 =w sub %t44, %t49
+	%t54 =w loadw %fx
+	%t42 =w add %t43, %t54
+	storew %t42, %nx
+	%t59 =w loadw %zx
+	%t60 =w loadw %zy
+	%t58 =w mul %t59, %t60
+	%t57 =w div %t58, 500
+	%t62 =w loadw %fy
+	%t56 =w add %t57, %t62
+	storew %t56, %ny
+	%t64 =w loadw %nx
+	storew %t64, %zx
+	%t66 =w loadw %ny
+	storew %t66, %zy
+	%t68 =w loadw %n
+	%t67 =w add %t68, 1
+	storew %t67, %n
+	jmp @l1
+@l3
+	%t72 =l loadl %col
+	%t73 =w loadw %n
+	%t74 =l extsw %t73
+	%t75 =l mul 4, %t74
+	%t71 =l add %t72, %t75
+	%t70 =w loadw %t71
+	storew %t70, %n
+	%t77 =w loadw %rnd
+	%t79 =w loadw %n
+	%t80 =w loadw %n
+	%t76 =w call $SDL_SetRenderDrawColor(w %t77, w 100, w %t79, w %t80, w 255, ...)
+	%t83 =w loadw %rnd
+	%t84 =w loadw %x
+	%t85 =w loadw %y
+	%t82 =w call $SDL_RenderDrawPoint(w %t83, w %t84, w %t85, ...)
+	ret 0
+}
+--- Output: size 247 ---
+@l0 : :
+@l1 : :
+@l2 : :
+@l4 : :
+@l5 : :
+@l3 : :
+@l1__r : @l2__r @l5__r : @l1__r-@l2__r @l2__r-@l5__r
+@l1__r__r : : @l1__r__r-@l1__r__r
+@l0__r : @l4__r @l1__r__r__r @l3__r : @l1__r__r__r-@l4__r @l4__r-@l3__r @l0__r-@l1__r__r__r @l1__r__r__r-@l3__r
+
+--- Correct: size 248 ---
+@l0 : :
+@l1 : :
+@l2 : :
+@l4 : :
+@l5 : :
+@l3 : :
+@l1__r : @l2__r @l5__r : @l1__r-@l2__r @l2__r-@l5__r
+@l1__r__r : : @l1__r__r-@l1__r__r
+@l0__r : @l1__r__r__r @l4__r @l3__r : @l0__r-@l1__r__r__r  @l1__r__r__r-@l4__r @l1__r__r__r-@l3__r @l4__r-@l3__r
+
+--- Stderr: size 0 ---
+
+--- Checker output: size 0 ---
+
+--- Resource usage ---
+program: { utime=0, stime=0, ptime=0, rtime=2, maxvsz=21622784, maxrss=2920448, nvcsw=1, nivcsw=2 }
+checker: { utime=976, stime=200, ptime=1176, rtime=1189, maxvsz=11403264, maxrss=98512896, nvcsw=171, nivcsw=94 }
+
+====== Test #4 =======
+--- Input: size 2100 ---
+export function w $main() {
+@l0
+	%c =l alloc4 4
+	%n =l alloc4 4
+	%x =l alloc4 4
+	%y =l alloc4 4
+	%e =l alloc8 8
+	%ie =l alloc8 8
+	%col =l alloc8 8
+	%W =l alloc4 4
+	%H =l alloc4 4
+	%rnd =l alloc4 4
+	%win =l alloc4 4
+	storew 800, %W
+	storew 800, %H
+	%t4 =w call $SDL_Init(w 32, ...)
+	%t11 =w loadw %W
+	%t12 =w loadw %H
+	%t7 =w call $SDL_CreateWindow(l $glo1, w 0, w 0, w %t11, w %t12, w 0, ...)
+	storew %t7, %win
+	%t16 =w loadw %win
+	%t17 =w sub 0, 1
+	%t15 =w call $SDL_CreateRenderer(w %t16, w %t17, w 0, ...)
+	storew %t15, %rnd
+	%t22 =l loadl %e
+	storel %t22, %ie
+	storew 20, %c
+	storew 0, %n
+@l1
+	%t28 =w loadw %n
+	%t27 =w csltw %t28, 200
+	jnz %t27, @l2, @l3
+@l2
+	%t31 =w loadw %c
+	%t33 =l loadl %col
+	%t34 =w loadw %n
+	%t35 =l extsw %t34
+	%t36 =l mul 4, %t35
+	%t32 =l add %t33, %t36
+	storew %t31, %t32
+	%t39 =w loadw %c
+	%t43 =w loadw %c
+	%t41 =w sub 255, %t43
+	%t40 =w div %t41, 8
+	%t38 =w add %t39, %t40
+	storew %t38, %c
+	%t46 =w loadw %n
+	%t45 =w add %t46, 1
+	storew %t45, %n
+	jmp @l1
+@l3
+	%t50 =l loadl %col
+	%t51 =w loadw %n
+	%t52 =l extsw %t51
+	%t53 =l mul 4, %t52
+	%t49 =l add %t50, %t53
+	storew 30, %t49
+	%t55 =w loadw %rnd
+	%t54 =w call $SDL_RenderClear(w %t55, ...)
+	storew 0, %x
+@l4
+	%t59 =w loadw %x
+	%t60 =w loadw %W
+	%t58 =w csltw %t59, %t60
+	jnz %t58, @l5, @l6
+@l5
+	storew 0, %y
+@l7
+	%t64 =w loadw %y
+	%t65 =w loadw %H
+	%t63 =w csltw %t64, %t65
+	jnz %t63, @l8, @l9
+@l8
+	%t67 =w loadw %x
+	%t68 =w loadw %y
+	%t66 =w call $plot(w %t67, w %t68, ...)
+	%t70 =w loadw %y
+	%t69 =w add %t70, 1
+	storew %t69, %y
+	jmp @l7
+@l9
+	%t72 =w loadw %x
+	%t71 =w add %t72, 1
+	storew %t71, %x
+	jmp @l4
+@l6
+	%t74 =w loadw %rnd
+	%t73 =w call $SDL_RenderPresent(w %t74, ...)
+@l10
+	jnz 1, @l11, @l12
+@l11
+	%t77 =l loadl %e
+	%t76 =w call $SDL_PollEvent(l %t77, ...)
+	jnz %t76, @l13, @l14
+@l13
+	%t81 =l loadl %ie
+	%t80 =l add %t81, 0
+	%t79 =w loadw %t80
+	%t78 =w ceqw %t79, 769
+	jnz %t78, @l16, @l17
+@l16
+	jmp @l12
+@l17
+@l14
+	jmp @l10
+@l12
+	%t85 =w loadw %rnd
+	%t84 =w call $SDL_DestroyRenderer(w %t85, ...)
+	%t87 =w loadw %win
+	%t86 =w call $SDL_DestroyWindow(w %t87, ...)
+	%t88 =w call $SDL_Quit(...)
+	ret 0
+}
+--- Output: size 804 ---
+@l0 : :
+@l1 : :
+@l2 : :
+@l3 : :
+@l4 : :
+@l5 : :
+@l7 : :
+@l8 : :
+@l9 : :
+@l6 : :
+@l10 : :
+@l11 : :
+@l13 : :
+@l16 : :
+@l17 : :
+@l14 : :
+@l12 : :
+@l10__r : @l13__r @l17__r @l11__r @l14__r : @l11__r-@l13__r @l13__r-@l17__r @l17__r-@l14__r @l10__r-@l11__r @l11__r-@l14__r
+@l10__r__r : : @l10__r__r-@l10__r__r
+@l7__r : @l8__r : @l7__r-@l8__r
+@l7__r__r : : @l7__r__r-@l7__r__r
+@l4__r : @l5__r @l7__r__r__r @l9__r : @l4__r-@l5__r @l5__r-@l7__r__r__r @l7__r__r__r-@l9__r
+@l4__r__r : : @l4__r__r-@l4__r__r
+@l1__r : @l2__r : @l1__r-@l2__r
+@l1__r__r : : @l1__r__r-@l1__r__r
+@l0__r : @l16__r @l1__r__r__r @l3__r @l4__r__r__r @l6__r @l10__r__r__r @l12__r : @l10__r__r__r-@l16__r @l16__r-@l12__r @l0__r-@l1__r__r__r @l1__r__r__r-@l3__r @l3__r-@l4__r__r__r @l4__r__r__r-@l6__r @l6__r-@l10__r__r__r @l10__r__r__r-@l12__r
+
+--- Correct: size 804 ---
+@l0 : :
+@l1 : :
+@l2 : :
+@l3 : :
+@l4 : :
+@l5 : :
+@l7 : :
+@l8 : :
+@l9 : :
+@l6 : :
+@l10 : :
+@l11 : :
+@l13 : :
+@l16 : :
+@l17 : :
+@l14 : :
+@l12 : :
+@l1__r : @l2__r : @l1__r-@l2__r
+@l1__r__r : : @l1__r__r-@l1__r__r
+@l7__r : @l8__r : @l7__r-@l8__r
+@l7__r__r : : @l7__r__r-@l7__r__r
+@l4__r : @l5__r @l7__r__r__r @l9__r : @l4__r-@l5__r @l5__r-@l7__r__r__r @l7__r__r__r-@l9__r
+@l4__r__r : : @l4__r__r-@l4__r__r
+@l10__r : @l11__r @l13__r @l14__r @l17__r : @l10__r-@l11__r @l11__r-@l13__r @l11__r-@l14__r @l13__r-@l17__r @l17__r-@l14__r
+@l10__r__r : : @l10__r__r-@l10__r__r
+@l0__r : @l1__r__r__r @l3__r @l4__r__r__r @l6__r @l10__r__r__r @l16__r @l12__r : @l0__r-@l1__r__r__r @l1__r__r__r-@l3__r @l3__r-@l4__r__r__r @l4__r__r__r-@l6__r @l6__r-@l10__r__r__r @l10__r__r__r-@l16__r @l16__r-@l12__r @l10__r__r__r-@l12__r
+
+--- Stderr: size 0 ---
+
+--- Checker output: size 0 ---
+
+--- Resource usage ---
+program: { utime=0, stime=0, ptime=0, rtime=3, maxvsz=21622784, maxrss=3117056, nvcsw=1, nivcsw=2 }
+checker: { utime=1532, stime=324, ptime=1856, rtime=1882, maxvsz=11403264, maxrss=98594816, nvcsw=327, nivcsw=360 }
+
+====== Test #5 =======
+--- Input: size 640 ---
+export function w $chk(w %t0, w %t1) {
+@l0
+	%x =l alloc4 4
+	storew %t0, %x
+	%y =l alloc4 4
+	storew %t1, %y
+	%b =l alloc8 8
+	%t3 =w loadw %x
+	%t2 =w csltw %t3, 0
+	jnz %t2, @l1, @l6
+@l6
+	%t7 =w loadw %x
+	%t5 =w csltw 7, %t7
+	jnz %t5, @l1, @l5
+@l5
+	%t9 =w loadw %y
+	%t8 =w csltw %t9, 0
+	jnz %t8, @l1, @l4
+@l4
+	%t13 =w loadw %y
+	%t11 =w csltw 7, %t13
+	jnz %t11, @l1, @l2
+@l1
+	ret 0
+@l2
+	%t20 =l loadl %b
+	%t21 =w loadw %x
+	%t22 =l extsw %t21
+	%t23 =l mul 8, %t22
+	%t19 =l add %t20, %t23
+	%t18 =l loadl %t19
+	%t24 =w loadw %y
+	%t25 =l extsw %t24
+	%t26 =l mul 4, %t25
+	%t17 =l add %t18, %t26
+	%t16 =w loadw %t17
+	%t15 =w ceqw %t16, 0
+	ret %t15
+}
+
+--- Output: size 206 ---
+@l0 : :
+@l6 : :
+@l5 : :
+@l4 : :
+@l1 : :
+@l2 : :
+@l0__r : @l6__r @l5__r @l4__r @l2__r @l1__r : @l0__r-@l6__r @l6__r-@l5__r @l5__r-@l4__r @l4__r-@l2__r @l4__r-@l1__r @l5__r-@l1__r @l6__r-@l1__r @l0__r-@l1__r
+
+--- Correct: size 206 ---
+@l0 : :
+@l6 : :
+@l5 : :
+@l4 : :
+@l1 : :
+@l2 : :
+@l0__r : @l6__r @l5__r @l4__r @l2__r @l1__r : @l0__r-@l6__r @l6__r-@l5__r @l5__r-@l4__r @l4__r-@l2__r @l0__r-@l1__r @l6__r-@l1__r @l5__r-@l1__r @l4__r-@l1__r
+
+--- Stderr: size 0 ---
+
+--- Checker output: size 0 ---
+
+--- Resource usage ---
+program: { utime=0, stime=0, ptime=0, rtime=4, maxvsz=21622784, maxrss=3002368, nvcsw=1, nivcsw=2 }
+checker: { utime=1068, stime=288, ptime=1356, rtime=1370, maxvsz=11403264, maxrss=98639872, nvcsw=204, nivcsw=138 }
+
+====== Test #6 =======
+--- Input: size 725 ---
+export function w $board() {
+@l0
+	%x =l alloc4 4
+	%y =l alloc4 4
+	%b =l alloc8 8
+	storew 0, %y
+@l1
+	%t3 =w loadw %y
+	%t2 =w csltw %t3, 8
+	jnz %t2, @l2, @l3
+@l2
+	storew 0, %x
+@l4
+	%t8 =w loadw %x
+	%t7 =w csltw %t8, 8
+	jnz %t7, @l5, @l6
+@l5
+	%t16 =l loadl %b
+	%t17 =w loadw %x
+	%t18 =l extsw %t17
+	%t19 =l mul 8, %t18
+	%t15 =l add %t16, %t19
+	%t14 =l loadl %t15
+	%t20 =w loadw %y
+	%t21 =l extsw %t20
+	%t22 =l mul 4, %t21
+	%t13 =l add %t14, %t22
+	%t12 =w loadw %t13
+	%t10 =w call $printf(l $glo1, w %t12, ...)
+	%t24 =w loadw %x
+	%t23 =w add %t24, 1
+	storew %t23, %x
+	jmp @l4
+@l6
+	%t25 =w call $printf(l $glo2, ...)
+	%t28 =w loadw %y
+	%t27 =w add %t28, 1
+	storew %t27, %y
+	jmp @l1
+@l3
+	%t29 =w call $printf(l $glo3, ...)
+	ret 0
+}
+--- Output: size 319 ---
+@l0 : :
+@l1 : :
+@l2 : :
+@l4 : :
+@l5 : :
+@l6 : :
+@l3 : :
+@l4__r : @l5__r : @l4__r-@l5__r
+@l4__r__r : : @l4__r__r-@l4__r__r
+@l1__r : @l2__r @l4__r__r__r @l6__r : @l1__r-@l2__r @l2__r-@l4__r__r__r @l4__r__r__r-@l6__r
+@l1__r__r : : @l1__r__r-@l1__r__r
+@l0__r : @l1__r__r__r @l3__r : @l0__r-@l1__r__r__r @l1__r__r__r-@l3__r
+
+--- Correct: size 319 ---
+@l0 : :
+@l1 : :
+@l2 : :
+@l4 : :
+@l5 : :
+@l6 : :
+@l3 : :
+@l4__r : @l5__r : @l4__r-@l5__r
+@l4__r__r : : @l4__r__r-@l4__r__r
+@l1__r : @l2__r @l4__r__r__r @l6__r : @l1__r-@l2__r @l2__r-@l4__r__r__r @l4__r__r__r-@l6__r
+@l1__r__r : : @l1__r__r-@l1__r__r
+@l0__r : @l1__r__r__r @l3__r : @l0__r-@l1__r__r__r @l1__r__r__r-@l3__r
+
+--- Stderr: size 0 ---
+
+--- Checker output: size 0 ---
+
+--- Resource usage ---
+program: { utime=0, stime=0, ptime=0, rtime=3, maxvsz=21622784, maxrss=2994176, nvcsw=1, nivcsw=3 }
+checker: { utime=960, stime=184, ptime=1144, rtime=1167, maxvsz=11403264, maxrss=98557952, nvcsw=138, nivcsw=102 }
+
+====== Test #7 =======
+--- Input: size 240 ---
+function w $main() {
+@B1
+%a1 =w copy 5
+@B2
+%a1 =w mul %a1, %a1
+%cond =w csgew %a1, 200
+jnz %cond, @B3, @B4
+@B3
+%a1 =w mul %a1, %a1
+jmp @B5
+@B4
+%a1 =w mul %a1, %a1
+%cond2 =w csgew %a1, 100
+jnz %cond2, @B5, @B2
+@B5
+%a1 =w mul %a1, %a1
+ret 0
+}
+--- Output: size 218 ---
+@B1 : :
+@B2 : :
+@B3 : :
+@B4 : :
+@B5 : :
+@B2__r : @B4__r : @B2__r-@B4__r
+@B2__r__r : : @B2__r__r-@B2__r__r
+@B1__r : @B2__r__r__r @B3__r @B5__r : @B2__r__r__r-@B5__r @B1__r-@B2__r__r__r @B2__r__r__r-@B3__r @B3__r-@B5__r
+
+--- Correct: size 218 ---
+@B1 : :
+@B2 : :
+@B3 : :
+@B4 : :
+@B5 : :
+@B2__r : @B4__r : @B2__r-@B4__r
+@B2__r__r : : @B2__r__r-@B2__r__r
+@B1__r : @B2__r__r__r @B3__r @B5__r : @B1__r-@B2__r__r__r @B2__r__r__r-@B3__r @B2__r__r__r-@B5__r @B3__r-@B5__r
+
+--- Stderr: size 0 ---
+
+--- Checker output: size 0 ---
+
+--- Resource usage ---
+program: { utime=0, stime=0, ptime=0, rtime=2, maxvsz=21622784, maxrss=2924544, nvcsw=1, nivcsw=2 }
+checker: { utime=908, stime=228, ptime=1136, rtime=1151, maxvsz=11403264, maxrss=98492416, nvcsw=158, nivcsw=44 }
+
+====== Test #8 =======
+--- Input: size 278 ---
+function w $main() {
+@B1
+%a1 =w copy 5
+@B2
+%a1 =w mul %a1, %a1
+%cond =w csgew %a1, 200
+jnz %cond, @B3, @B4
+@B3
+%a1 =w mul %a1, %a1
+%cond1 =w csgew %a1, %a1
+jnz %cond1, @B5, @B4
+@B4
+%a1 =w mul %a1, %a1
+%cond2 =w csgew %a1, %a1
+jnz %cond2, @B5, @B2
+@B5
+%a1 =w mul %a1, %a1
+ret 0
+}
+--- Output: size 212 ---
+@B1 : :
+@B2 : :
+@B3 : :
+@B4 : :
+@B5 : :
+@B2__r : @B3__r @B4__r : @B2__r-@B3__r @B3__r-@B4__r @B2__r-@B4__r
+@B2__r__r : : @B2__r__r-@B2__r__r
+@B1__r : @B2__r__r__r @B5__r : @B1__r-@B2__r__r__r @B2__r__r__r-@B5__r
+
+--- Correct: size 212 ---
+@B1 : :
+@B2 : :
+@B3 : :
+@B4 : :
+@B5 : :
+@B2__r : @B3__r @B4__r : @B2__r-@B3__r @B2__r-@B4__r @B3__r-@B4__r
+@B2__r__r : : @B2__r__r-@B2__r__r
+@B1__r : @B2__r__r__r @B5__r : @B1__r-@B2__r__r__r @B2__r__r__r-@B5__r
+
+--- Stderr: size 0 ---
+
+--- Checker output: size 0 ---
+
+--- Resource usage ---
+program: { utime=0, stime=0, ptime=0, rtime=3, maxvsz=21622784, maxrss=3055616, nvcsw=1, nivcsw=2 }
+checker: { utime=984, stime=204, ptime=1188, rtime=1201, maxvsz=11403264, maxrss=98639872, nvcsw=183, nivcsw=121 }
+
+ejudge 3.6.5+ (GIT 3a8837a5) #5 (2018-02-09 13:43:46).
+
+Copyright © 2000-2017 Alexander Chernov.
